@@ -60,7 +60,7 @@ const getData = (data) => {
       <a class="black-text">${truncate(`${item.name}`, 20)}</a>
     </div>
     <div class="card-action">
-      <a href="#modal1" class="track modal-trigger" data-link="${item.tracks.href}" data-title="${item.name}">This is a link</a>
+      <a href="#modal1" class="track modal-trigger" data-link="${item.tracks.href}" data-title="${item.name}">Tracks list</a>
     </div>
   </div>
   </div>
@@ -111,11 +111,34 @@ function appendToModal(params){
         <td>${val.track.artists[0].name}</td>
         <td>${truncate(`${val.track.name}`, 16)}</td>
         <td>${val.track.album.release_date}</td>
+        <td>${category(`${val.track.album.release_date}`)}</td>
         <td>${msToMinutesSecond(`${val.track.duration_ms}`)}</td>
       </tr>
     `;
     return rows.innerHTML = holder;
   },'')
+  
+}
+
+function category(str){
+  const getYear = parseInt(str.substring(0,4));
+  const today = new Date();
+  const year = today.getFullYear();
+  const substract = year - getYear;
+  
+  let category = '';
+    if(getYear === year){
+       return category = 'Top 40';
+    }
+    
+    if(substract === 1) {
+       category = 'Current';
+    } else if((substract >= 2) && (substract < 10)){
+       category = 'Recurrent';
+    } else {
+       category = 'Oldies';
+    }
+    return category;
 }
 
 // Function change ms to Minutes and second
