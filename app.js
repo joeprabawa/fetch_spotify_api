@@ -39,10 +39,7 @@ const output = document.querySelector('.output');
 
 // Fetch Call
 fetch(url,options)
-.then(response => {
-  console.log(response.status)
-  return response.json();
-  })
+.then(response => response.json())
 .then(data => getData(data))
 
 // Get the data
@@ -51,7 +48,7 @@ const getData = (data) => {
   items.reduce((accumulator, item) => {
   // console.log(item);
   const holder = accumulator + `
-  <div class="col s12 m4 l4">
+  <div class="col s12 m6 l4 xl4">
   <div class="card">
     <div class="card-image">
       <img src="${item.images[0].url}">
@@ -85,32 +82,38 @@ const getData = (data) => {
           }
           // Fetch playlist url
           fetch(url,options)
-          .then(response =>{
-            console.log(response)
-            return response.json()
-          })
+          .then(response => response.json())
           .then(data => appendToModal(data));
         })
       })
     }
   getTracks();
 }
-  // Function truncate text
-const truncate = (str, length) => {
-  return (str.length >= length) ? `${str.substring(0,length)} ....` : str;
-}
-
+  
 // Function append tracks to modal content 
 function appendToModal(params){
   const rows = document.querySelector('tbody');
   const data = params.items;
   data.reduce((acc,val,index) => {
+    // Set artist URL 
+    const url = val.track.artists[0].href;
+    const options = {
+      headers : {
+        'Authorization' : `Bearer ${_token}`
+      }
+    }
+
+    // Fetch artist URL
+    fetch(url,options)
+      .then(res => res.json())
+      .then(data => console.log(data));
     const holder = acc + `
       <tr>
         <td>${index+1}</td>
         <td>${val.track.artists[0].name}</td>
         <td>${truncate(`${val.track.name}`, 16)}</td>
         <td>${val.track.album.release_date}</td>
+        <td>${category(`${val.track.album.release_date}`)}</td>
         <td>${category(`${val.track.album.release_date}`)}</td>
         <td>${msToMinutesSecond(`${val.track.duration_ms}`)}</td>
       </tr>
@@ -147,6 +150,11 @@ function msToMinutesSecond(ms) {
   var seconds = ((ms % 60000) / 1000).toFixed(0);
   return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
 } 
+
+// Function truncate text
+const truncate = (str, length) => {
+  return (str.length >= length) ? `${str.substring(0,length)} ....` : str;
+}
 
 // Init modal
   document.addEventListener('DOMContentLoaded', function() {
