@@ -109,16 +109,27 @@ function appendToModal(params){
       <tr>
         <td>${index+1}</td>
         <td>${val.track.artists[0].name}</td>
-        <td>${val.track.name}</td>
+        <td>${truncate(`${val.track.name}`, 16)}</td>
         <td>${val.track.album.release_date}</td>
-        <td>${val.track.duration_ms}</td>
+        <td>${msToMinutesSecond(`${val.track.duration_ms}`)}</td>
       </tr>
     `;
     return rows.innerHTML = holder;
   },'')
 }
-  // Init modal
+
+// Function change ms to Minutes and second
+function msToMinutesSecond(ms) {
+  var minutes = Math.floor(ms / 60000);
+  var seconds = ((ms % 60000) / 1000).toFixed(0);
+  return minutes + ":" + (seconds < 10 ? '0' : '') + seconds;
+} 
+
+// Init modal
   document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.modal');
-    var modal = M.Modal.init(elems);
+    var modal = M.Modal.init(elems,
+      {
+        endingTop: '50%'
+      });
   });

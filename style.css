@@ -1,0 +1,8 @@
+.modal { 
+    width: 78% !important ; 
+    height: 80% !important; 
+}
+
+#modal1{
+    transform: translateY(-50%) !important;
+}
