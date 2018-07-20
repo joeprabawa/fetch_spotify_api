@@ -1,3 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=Cabin:400,500,600,700');
+
+img.logo{
+    width: 4%;
+    vertical-align: middle;
+    margin:auto 10px;
+}
+
+a.brand-logo{
+    font-family: 'Cabin', sans-serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+}
+
+a.playlist-name{
+    font-weight:400;
+    font-size:1.3rem;
+}
+
 .modal { 
     width: 78% !important ; 
     height: 80% !important; 
@@ -6,3 +25,33 @@
 #modal1{
     transform: translateY(-50%) !important;
 }
+
+.modal-header {
+    padding: 15px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+.modal-content {
+    height: auto !important;
+    max-height: calc(100vh - 340px) !important;
+  }
+.modal-header h4.title{
+    margin: auto;
+    font-family: 'Cabin';
+    font-weight: 400!important;
+}
+  
+    
+@media (min-width:320px){
+img.logo{
+    width: 40px;
+    vertical-align: middle;
+    margin-left: 15px;
+}
+
+@media (min-width:400px){
+    img.logo{
+        width: 40px;
+        vertical-align: middle;
+        margin-left: 50px;
+    }

@@ -54,10 +54,11 @@ const getData = (data) => {
       <img src="${item.images[0].url}">
     </div>
     <div class="card-content">
-      <a class="black-text">${truncate(`${item.name}`, 20)}</a>
+      <a class="black-text playlist-name">${truncate(`${item.name}`, 20)}</a>
     </div>
-    <div class="card-action">
-      <a href="#modal1" class="track modal-trigger" data-link="${item.tracks.href}" data-title="${item.name}">Tracks list</a>
+    <div class="card-action ">
+      <a href="#modal1" class="right-align track btn black white-text modal-trigger" data-link="${item.tracks.href}" data-title="${item.name}">Tracks list</a>
+      <a href="#" class="track btn green accent-3 white-text" data-link="${item.tracks.href}" data-title="${item.name}">Select</a>
     </div>
   </div>
   </div>
@@ -65,8 +66,8 @@ const getData = (data) => {
   return output.innerHTML = holder;
   },'')
   
-  // Function get Track List  
-  function getTracks(){
+// Function get Track List  
+function getTracks(){
     const modalTitle = document.querySelector('h4.title');
     const buttons = document.querySelectorAll('a.track');
     buttons.forEach((button,index) => {
@@ -103,10 +104,15 @@ function appendToModal(params){
       }
     }
 
-    // Fetch artist URL
-    fetch(url,options)
+    function genre(){
+      return fetch(url,options)
       .then(res => res.json())
-      .then(data => console.log(data));
+      .then(data => {
+        console.log(data)
+        return data
+      })
+    }
+   
     const holder = acc + `
       <tr>
         <td>${index+1}</td>
@@ -114,15 +120,15 @@ function appendToModal(params){
         <td>${truncate(`${val.track.name}`, 16)}</td>
         <td>${val.track.album.release_date}</td>
         <td>${category(`${val.track.album.release_date}`)}</td>
-        <td>${category(`${val.track.album.release_date}`)}</td>
         <td>${msToMinutesSecond(`${val.track.duration_ms}`)}</td>
+        <td class="genre"></td>
       </tr>
     `;
     return rows.innerHTML = holder;
   },'')
-  
 }
 
+// Function set category
 function category(str){
   const getYear = parseInt(str.substring(0,4));
   const today = new Date();
@@ -161,6 +167,12 @@ const truncate = (str, length) => {
     var elems = document.querySelectorAll('.modal');
     var modal = M.Modal.init(elems,
       {
-        endingTop: '50%'
+        endingTop: '50%',
+        preventScrolling: false,
+        inDuration:500,
+        outDuration:600
       });
+
+    var elems = document.querySelectorAll('.tooltipped');
+    var tooltips = M.Tooltip.init(elems);
   });
