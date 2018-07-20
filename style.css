@@ -34,7 +34,8 @@ a.playlist-name{
 .modal-content {
     height: auto !important;
     max-height: calc(100vh - 340px) !important;
-  }
+}
+
 .modal-header h4.title{
     margin: auto;
     font-family: 'Cabin';
@@ -47,6 +48,7 @@ img.logo{
     width: 40px;
     vertical-align: middle;
     margin-left: 15px;
+    }
 }
 
 @media (min-width:400px){
@@ -55,3 +57,4 @@ img.logo{
         vertical-align: middle;
         margin-left: 50px;
     }
+}
