@@ -58,7 +58,7 @@ const getData = (data) => {
     </div>
     <div class="card-action ">
       <a href="#modal1" class="right-align track btn black white-text modal-trigger" data-link="${item.tracks.href}" data-title="${item.name}">Tracks list</a>
-      <a href="#" class="track btn green accent-3 white-text" data-link="${item.tracks.href}" data-title="${item.name}">Select</a>
+      <a href="#" class="yellow darken-1 track btn white-text" data-link="${item.tracks.href}" data-title="${item.name}">Select</a>
     </div>
   </div>
   </div>
@@ -128,11 +128,9 @@ function tempo(params){
       'Authorization' : `Bearer ${_token}`
     }
   }
-  return fetch(url,options) 
+  fetch(url,options) 
     .then(res => res.json())
-    .then(data => {
-      console.log(data.tempo)
-      Math.round(data.tempo)})
+    .then(data => console.log(`${Math.round(data.tempo)} BPM`))
 } 
 // Function set category
 function category(str){
