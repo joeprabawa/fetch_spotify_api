@@ -19,7 +19,8 @@ a.playlist-name{
 
 .modal { 
     width: 78% !important ; 
-    height: 80% !important; 
+    height: 80% !important;
+    border-radius: 0.5rem;
 }
 
 #modal1{
@@ -27,7 +28,7 @@ a.playlist-name{
 }
 
 .modal-header {
-    padding: 15px;
+    padding: 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 
@@ -41,13 +42,20 @@ a.playlist-name{
     font-family: 'Cabin';
     font-weight: 400!important;
 }
-  
-    
+
 @media (min-width:320px){
+    img.logo{
+        width: 40px;
+        vertical-align: middle;
+        margin-left:15px;
+        }
+}
+    
+@media (min-width:360px){
 img.logo{
     width: 40px;
     vertical-align: middle;
-    margin-left: 15px;
+    margin-left:30px;
     }
 }
 
@@ -58,3 +66,4 @@ img.logo{
         margin-left: 50px;
     }
 }
+

@@ -58,7 +58,7 @@ const getData = (data) => {
     </div>
     <div class="card-action ">
       <a href="#modal1" class="right-align track btn black white-text modal-trigger" data-link="${item.tracks.href}" data-title="${item.name}">Tracks list</a>
-      <a href="#" class="track btn green accent-3 white-text" data-link="${item.tracks.href}" data-title="${item.name}">Select</a>
+      <a href="#" class="track btn green accent-3 white-text tooltiped" data-link="${item.tracks.href}" data-title="${item.name}" data-position="bottom" data-tooltip="${item.name}">Select</a>
     </div>
   </div>
   </div>
@@ -96,6 +96,7 @@ function appendToModal(params){
   const rows = document.querySelector('tbody');
   const data = params.items;
   data.reduce((acc,val,index) => {
+    console.log(val)
     // Set artist URL 
     const url = val.track.artists[0].href;
     const options = {
@@ -103,17 +104,19 @@ function appendToModal(params){
         'Authorization' : `Bearer ${_token}`
       }
     }
-
-    function genre(){
-      return fetch(url,options)
+    
+    fetch(url,options)
       .then(res => res.json())
-      .then(data => {
-        console.log(data)
-        return data
-      })
-    }
-   
-    const holder = acc + `
+      .then(genre)
+
+      function genre(params){
+        params.genres.map(function(val, index){
+          const genre = val;
+          console.log(genre, index);
+        })
+      }
+    
+      const holder = acc + `
       <tr>
         <td>${index+1}</td>
         <td>${val.track.artists[0].name}</td>
@@ -124,7 +127,7 @@ function appendToModal(params){
         <td class="genre"></td>
       </tr>
     `;
-    return rows.innerHTML = holder;
+  return rows.innerHTML = holder;
   },'')
 }
 
