@@ -1,11 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Cabin:400,500,600,700');
 
-img.logo{
-    width: 4%;
-    vertical-align: middle;
-    margin:auto 10px;
-}
-
 a.brand-logo{
     font-family: 'Cabin', sans-serif;
     font-size: 1.7rem;
@@ -15,6 +9,18 @@ a.brand-logo{
 a.playlist-name{
     font-weight:400;
     font-size:1.3rem;
+}
+
+img.logo{
+    width: 4%;
+    vertical-align: middle;
+    
+}
+
+img.firebase{
+    width: 18%;
+    vertical-align: middle;
+    margin-left:10px;
 }
 
 .modal { 
@@ -43,27 +49,44 @@ a.playlist-name{
     font-weight: 400!important;
 }
 
-@media (min-width:320px){
+@media (max-width:320px){
     img.logo{
-        width: 40px;
+        width: 25px;
         vertical-align: middle;
-        margin-left:15px;
-        }
+       
+    }
+    img.firebase{
+        width: 46%;
+        vertical-align: middle;
+        margin: auto 10px;
+    }
 }
     
-@media (min-width:360px){
-img.logo{
-    width: 40px;
-    vertical-align: middle;
-    margin-left:30px;
+@media (max-width:360px){
+    img.logo{
+        width: 30px;
+        vertical-align: middle;
+        
+        }
+    img.firebase{
+        width: 46%;
+        vertical-align: middle;
+        margin: auto 10px;
     }
 }
 
-@media (min-width:400px){
+@media (max-width:500px){
     img.logo{
-        width: 40px;
+        width: 35px;
         vertical-align: middle;
-        margin-left: 50px;
+       
+    }
+    img.firebase{
+        width: 46%;
+        vertical-align: middle;
+        margin: auto 10px;
     }
 }
+
+
 

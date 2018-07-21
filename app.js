@@ -58,7 +58,7 @@ const getData = (data) => {
     </div>
     <div class="card-action ">
       <a href="#modal1" class="right-align track btn black white-text modal-trigger" data-link="${item.tracks.href}" data-title="${item.name}">Tracks list</a>
-      <a href="#" class="track btn green accent-3 white-text tooltiped" data-link="${item.tracks.href}" data-title="${item.name}" data-position="bottom" data-tooltip="${item.name}">Select</a>
+      <a href="#" class="track btn green accent-3 white-text" data-link="${item.tracks.href}" data-title="${item.name}">Select</a>
     </div>
   </div>
   </div>
@@ -93,44 +93,47 @@ function getTracks(){
   
 // Function append tracks to modal content 
 function appendToModal(params){
+  let html = '';
   const rows = document.querySelector('tbody');
   const data = params.items;
-  data.reduce((acc,val,index) => {
-    console.log(val)
-    // Set artist URL 
-    const url = val.track.artists[0].href;
-    const options = {
-      headers : {
-        'Authorization' : `Bearer ${_token}`
-      }
-    }
-    
-    fetch(url,options)
-      .then(res => res.json())
-      .then(genre)
+  // Loop the data
+  data.forEach((val, index) => {
+    const trackName = val.track.name;
+    const releaseDate = val.track.album.release_date;
+    const duration = val.track.duration_ms;
+    const tempoId = val.track.id;
 
-      function genre(params){
-        params.genres.map(function(val, index){
-          const genre = val;
-          console.log(genre, index);
-        })
-      }
-    
-      const holder = acc + `
-      <tr>
+    console.log(tempoId)
+    // Assign to html
+    html += `
+    <tr>
         <td>${index+1}</td>
         <td>${val.track.artists[0].name}</td>
-        <td>${truncate(`${val.track.name}`, 16)}</td>
-        <td>${val.track.album.release_date}</td>
-        <td>${category(`${val.track.album.release_date}`)}</td>
-        <td>${msToMinutesSecond(`${val.track.duration_ms}`)}</td>
-        <td class="genre"></td>
+        <td>${truncate(`${trackName}`, 16)}</td>
+        <td>${releaseDate}</td>
+        <td>${category(`${releaseDate}`)}</td>
+        <td>${msToMinutesSecond(`${duration}`)}</td>
+        <td>${tempo(`${tempoId}`)}</td>
       </tr>
-    `;
-  return rows.innerHTML = holder;
-  },'')
+    `
+  })
+  return rows.innerHTML = html;
 }
 
+// Function to get tempo
+function tempo(params){
+  const url = `https://api.spotify.com/v1/audio-features/${params}`
+  const options = {
+    headers : {
+      'Authorization' : `Bearer ${_token}`
+    }
+  }
+  return fetch(url,options) 
+    .then(res => res.json())
+    .then(data => {
+      console.log(data.tempo)
+      Math.round(data.tempo)})
+} 
 // Function set category
 function category(str){
   const getYear = parseInt(str.substring(0,4));
@@ -142,15 +145,14 @@ function category(str){
     if(getYear === year){
        return category = 'Top 40';
     }
-    
-    if(substract === 1) {
-       category = 'Current';
-    } else if((substract >= 2) && (substract < 10)){
-       category = 'Recurrent';
-    } else {
-       category = 'Oldies';
-    }
-    return category;
+      if(substract === 1) {
+        category = 'Current';
+      } else if((substract >= 2) && (substract < 10)){
+        category = 'Recurrent';
+      } else {
+        category = 'Oldies';
+      }
+      return category;
 }
 
 // Function change ms to Minutes and second
@@ -162,7 +164,7 @@ function msToMinutesSecond(ms) {
 
 // Function truncate text
 const truncate = (str, length) => {
-  return (str.length >= length) ? `${str.substring(0,length)} ....` : str;
+  return (str.length >= length) ?  `${str.substring(0,length)} ....` : str;
 }
 
 // Init modal
