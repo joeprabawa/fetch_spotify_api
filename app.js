@@ -68,6 +68,7 @@ const getData = (data) => {
   
 // Function get Track List  
 function getTracks(){
+    //Append playlist name to modal header
     const modalTitle = document.querySelector('h4.title');
     const buttons = document.querySelectorAll('a.track');
     buttons.forEach((button,index) => {
@@ -93,11 +94,10 @@ function getTracks(){
   
 // Function append tracks to modal content 
 function appendToModal(params){
-  let html = '';
   const rows = document.querySelector('tbody');
   const data = params.items;
   // Loop the data
-  data.forEach((val, index) => {
+  data.reduce((acc, val, index) => {
     const trackName = val.track.name;
     const releaseDate = val.track.album.release_date;
     const duration = val.track.duration_ms;
@@ -105,7 +105,7 @@ function appendToModal(params){
 
     console.log(tempoId)
     // Assign to html
-    html += `
+    return rows.innerHTML = acc + `
     <tr>
         <td>${index+1}</td>
         <td>${val.track.artists[0].name}</td>
@@ -113,25 +113,29 @@ function appendToModal(params){
         <td>${releaseDate}</td>
         <td>${category(`${releaseDate}`)}</td>
         <td>${msToMinutesSecond(`${duration}`)}</td>
-        <td>${tempo(`${tempoId}`)}</td>
+        <td>${tempo(`${tempoId}`).then(result => result)}</td>
       </tr>
     `
-  })
-  return rows.innerHTML = html;
+  }, '')
 }
 
 // Function to get tempo
-function tempo(params){
-  const url = `https://api.spotify.com/v1/audio-features/${params}`
-  const options = {
-    headers : {
-      'Authorization' : `Bearer ${_token}`
-    }
-  }
-  fetch(url,options) 
-    .then(res => res.json())
-    .then(data => console.log(`${Math.round(data.tempo)} BPM`))
-} 
+async function tempo(params){
+    const url = `https://api.spotify.com/v1/audio-features/${params}`;
+    const options = {
+      headers : {
+        'Authorization' : `Bearer ${_token}`
+      }
+    };
+    const data = await fetch(url,options);
+    console.log(data)
+    const json = await data.json();
+    const final = json.tempo
+    // const promise = Promise.resolve(json.tempo);
+    // console.log(promise)
+    return final;
+}
+
 // Function set category
 function category(str){
   const getYear = parseInt(str.substring(0,4));
