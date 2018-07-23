@@ -28,12 +28,16 @@ if (!_token) {
   window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
 }
 
+
+
 const url = 'https://api.spotify.com/v1/me/playlists';
 const options = {
   headers : {
   'Authorization' :  `Bearer ${_token}`
   }
 }
+
+
 
 const output = document.querySelector('.output');
 
@@ -85,7 +89,7 @@ function getTracks(){
           // Fetch playlist url
           fetch(url,options)
           .then(response => response.json())
-          .then(data => appendToModal(data));
+          .then(data => appendToModal(data))
         })
       })
     }
@@ -113,7 +117,10 @@ function appendToModal(params){
         <td>${releaseDate}</td>
         <td>${category(`${releaseDate}`)}</td>
         <td>${msToMinutesSecond(`${duration}`)}</td>
-        <td>${tempo(`${tempoId}`).then(result => result)}</td>
+        <td>${tempo(`${tempoId}`).then(result => {
+          console.log(result)
+          return JSON.stringify(result)
+        })}</td>
       </tr>
     `
   }, '')
@@ -128,12 +135,10 @@ async function tempo(params){
       }
     };
     const data = await fetch(url,options);
-    console.log(data)
     const json = await data.json();
-    const final = json.tempo
-    // const promise = Promise.resolve(json.tempo);
-    // console.log(promise)
-    return final;
+    const final = Math.round(json.tempo)
+    // console.log(final)
+    return final
 }
 
 // Function set category
