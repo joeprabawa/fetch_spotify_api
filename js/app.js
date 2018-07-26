@@ -28,16 +28,12 @@ if (!_token) {
   window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
 }
 
-
-
 const url = 'https://api.spotify.com/v1/me/playlists';
 const options = {
   headers : {
   'Authorization' :  `Bearer ${_token}`
   }
 }
-
-
 
 const output = document.querySelector('.output');
 
@@ -62,7 +58,7 @@ const getData = (data) => {
     </div>
     <div class="card-action ">
       <a href="#modal1" class="right-align track btn black white-text modal-trigger" data-link="${item.tracks.href}" data-title="${item.name}">Tracks list</a>
-      <a href="#" class="yellow darken-1 track btn white-text" data-link="${item.tracks.href}" data-title="${item.name}">Select</a>
+      <a href="#" class="select yellow darken-1 btn white-text" data-link="${item.tracks.href}">Select</a>
     </div>
   </div>
   </div>
@@ -75,7 +71,7 @@ function getTracks(){
     //Append playlist name to modal header
     const modalTitle = document.querySelector('h4.title');
     const buttons = document.querySelectorAll('a.track');
-    buttons.forEach((button,index) => {
+    buttons.forEach(button => {
         button.addEventListener('click', e => {
           // Append Playlist name to modal title
           modalTitle.innerHTML = button.dataset.title;
@@ -94,51 +90,89 @@ function getTracks(){
       })
     }
   getTracks();
+  select()
 }
-  
+
+// Function select playlist 
+function select(){
+  const buttons = document.querySelectorAll('.select');
+  buttons.forEach(button => {
+    button.addEventListener('click', e => {
+      const url = button.dataset.link
+      const options = {
+            headers : {
+              'Authorization' : `Bearer ${_token}`
+            }
+          }
+          // Fetch playlist url
+          fetch(url,options)
+          .then(response => response.json())
+          .then(data => saveToFirebase(data.items))
+    })
+  })
+}
+
+// Function save to firebase
+function saveToFirebase(params){
+  // Loop data
+  params.map( async (val, index) => {
+    const {track} = val;
+    const artistName = track.artists[0].name
+    const trackName = track.name;
+    const releaseDate = track.album.release_date;
+    const duration = track.duration_ms;
+    const tempoId = track.id;
+    const tempoResult = await tempo(`${tempoId}`);
+    console.log(tempoResult)
+  })
+}
+
 // Function append tracks to modal content 
 function appendToModal(params){
   const rows = document.querySelector('tbody');
   const data = params.items;
   // Loop the data
-  data.reduce((acc, val, index) => {
-    const trackName = val.track.name;
-    const releaseDate = val.track.album.release_date;
-    const duration = val.track.duration_ms;
-    const tempoId = val.track.id;
-
-    console.log(tempoId)
+  const rowsArr = data.map( async (val, index) => {
+    const {track} = val
+    const trackName = track.name;
+    const artistName = track.artists[0].name
+    const releaseDate = track.album.release_date;
+    const duration = track.duration_ms;
+    const tempoId = track.id;
+    const tempoResult = await tempo(`${tempoId}`)
+    
     // Assign to html
-    return rows.innerHTML = acc + `
+    return `
     <tr>
-        <td>${index+1}</td>
-        <td>${val.track.artists[0].name}</td>
-        <td>${truncate(`${trackName}`, 16)}</td>
-        <td>${releaseDate}</td>
-        <td>${category(`${releaseDate}`)}</td>
-        <td>${msToMinutesSecond(`${duration}`)}</td>
-        <td>${tempo(`${tempoId}`).then(result => {
-          console.log(result)
-          return JSON.stringify(result)
-        })}</td>
-      </tr>
-    `
-  }, '')
+      <td>${index+1}</td>
+      <td>${artistName}</td>
+      <td>${truncate(`${trackName}`, 16)}</td>
+      <td>${releaseDate}</td>
+      <td>${category(`${releaseDate}`)}</td>
+      <td>${msToMinutesSecond(`${duration}`)}</td>
+      <td>${tempoResult}</td>
+    </tr>
+    `;
+  })
+  Promise.all(rowsArr)
+  .then(result => {
+    rows.innerHTML = result.join('')
+  })
 }
 
 // Function to get tempo
 async function tempo(params){
-    const url = `https://api.spotify.com/v1/audio-features/${params}`;
-    const options = {
-      headers : {
-        'Authorization' : `Bearer ${_token}`
-      }
-    };
-    const data = await fetch(url,options);
-    const json = await data.json();
-    const final = Math.round(json.tempo)
-    // console.log(final)
-    return final
+  const url = `https://api.spotify.com/v1/audio-features/${params}`;
+  const options = {
+    headers : {
+      'Authorization' : `Bearer ${_token}`
+    }
+  };
+  const data = await fetch(url,options);
+  const json = await data.json();
+  const final = Math.round(json.tempo)
+  // console.log(final)
+  return `${final} BPM`
 }
 
 // Function set category
@@ -188,3 +222,4 @@ const truncate = (str, length) => {
     var elems = document.querySelectorAll('.tooltipped');
     var tooltips = M.Tooltip.init(elems);
   });
+
