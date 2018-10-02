@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,30 +8,68 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
     <link rel="stylesheet" href="./style.css">
+    <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-firestore.js"></script>
 </head>
+
 <body>
-    <nav>
-        <div class="nav-wrapper white z-index-3">
+    <nav class="z-depth-0">
+        <div class="nav-wrapper white z-depth-0">
             <div class="container">
-                <img class="logo" src="./logo.png" alt="logo"><a href="#" class="light brand-logo black-text">Spotify Playlist</a>
+                <img class="logo" src="./logo.png" alt="logo"><a href="#" class="light brand-logo black-text">Spotify
+                    Playlist</a>
                 <ul id="nav-mobile" class="right hide-on-med-and-down">
-                    <li><a href="sass.html" class="black-text">Sass</a></li>
+                    <li><a href="#" class="black-text songs">Get Song</a></li>
                 </ul>
             </div>
         </div>
     </nav>
     <!-- end Nav  -->
-    <div class="container">
-        <section>
-            <div class="row output">
+    <ul class="tabs tabs-fixed-width">
+        <li class="tab"><a class="active" href="#test1">Playlists</a></li>
+        <li class="tab"><a href="#test2">Get Songs</a></li>
 
-            </div>
-        </section>
+    </ul>
+    <div id="test1" class="col s12">
+        <div class="container">
+            <section>
+                <div class="row output">
+                </div>
+            </section>
+        </div>
     </div>
+    <div id="test2" class="col s12">
+        <div class="container">
+            <p>Test</p>
+        </div>
+    </div>
+
+
+
+
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/js/materialize.min.js"></script>
     <script src="./app.js"></script>
+    <script>
+        firebase.initializeApp({
+            apiKey: 'AIzaSyCOXEtXVVe6vunW8UyrHnal0MZrCZnU6Nk',
+            authDomain: 'fetch-spotify-api.firebaseapp.com',
+            projectId: 'fetch-spotify-api'
+        });
+
+        // Initialize Cloud Firestore through Firebase
+        var db = firebase.firestore();
+
+        // Disable deprecated features
+        db.settings({
+            timestampsInSnapshots: true
+        });
+    </script>
+
+
 </body>
+
 </html>
 
 <!-- Modal Structure -->
@@ -40,20 +79,20 @@
     </div>
     <div class="modal-content">
         <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Artist</th>
-                <th>Title</th>
-                <th>Release Date</th>
-                <th>Category</th>
-                <th>Duration</th>
-                <th>Genre</th>
-            </tr>
-        </thead>
-        <tbody class="table">
-           
-        </tbody>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Artist</th>
+                    <th>Title</th>
+                    <th>Release Date</th>
+                    <th>Category</th>
+                    <th>Duration</th>
+                    <th>BPM</th>
+                </tr>
+            </thead>
+            <tbody class="table">
+
+            </tbody>
         </table>
     </div>
     <div class="modal-footer">
